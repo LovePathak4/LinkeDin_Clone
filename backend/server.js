@@ -5,7 +5,8 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import postRoutes from './routes/posts.routes.js';
 import userRoutes from './routes/user.routes.js';
-import postController from "./controllers/posts.controller.js";
+// import postController from "./controllers/posts.controller.js"; 
+
 
 
 dotenv.config();
@@ -13,12 +14,14 @@ dotenv.config();
 const app = express();
 
 app.use(cors());
+app.use(postRoutes);
+app.use(userRoutes);
 
 app.use(express.json());
 
 
 
-app.use("/api/posts", postRoutes);
+// app.use("/api/posts", postRoutes);
 
 
 
