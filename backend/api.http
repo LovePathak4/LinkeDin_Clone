@@ -1,23 +1,41 @@
-POST https://localhost:9080/register HTTP/1.1
+POST http://localhost:9080/register HTTP/1.1
 Content-Type: application/json
 
 {
-    "username"
-    "password"
-    "email"
-    "name"
+    # "username":lokesh,
+    # "password":love@1234,
+    # "email":love@gmail.com,
+    # "name":love,
+
+
+     "username": "lokesh",
+    "password": "love@1234",
+    "email": "love@gmail.com",
+    "name": "love"
 }
+
+
 
 
 ###
 
-POST https://localhost:9080/login HTTP/1.1
+POST http://localhost:9080/login HTTP/1.1
 Content-Type: application/json
 
 {
     
-    "email"
-    "password"
+    "email":"love@gmail.com",
+    "password":"love@1234"
 }
 
+
+
+###
+
+GET  http://localhost:9080/get_user_and_profile
+Content-Type: application/json
+
+{
+  "token": "004a7aafa85364252f015352abf0aa8fff26d21bddabca78f19a09eb21e21988"
+}
 
