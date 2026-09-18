@@ -6,7 +6,11 @@ import { updateUserProfile } from "../controllers/user.controller.js";
 import {getUserAndProfile} from "../controllers/user.controller.js"; 
 import { updateProfileData } from "../controllers/user.controller.js";
 import { getAllUserProfile } from "../controllers/user.controller.js";
-
+//import { downloadProfile } from "../controllers/user.controller.js";
+import { sendConnectionRequest} from "../controllers/user.controller.js";
+import { getMyConnectionsRequests} from "../controllers/user.controller.js";
+import { whatAreMyConnections } from "../controllers/user.controller.js";
+import { acceptUserConnectionRequest} from "../controllers/user.controller.js";
 
 
 
@@ -38,8 +42,11 @@ router.route("/user_update").post(updateUserProfile);
 router.route("/get_user_and_profile").post(getUserAndProfile);
 router.route("/update_profile_data").post(updateProfileData);
 router.route("/get_all_users").post(getAllUserProfile);
-router.route("/user/download_resume").get(downloadProfile);
-
+//router.route("/user/download_resume").get(downloadProfile);
+router.route("/user/send_connection_request").post(sendConnectionRequest);
+router.route("/user/getConnection_requests").get(getMyConnectionsRequests);
+router.route("/user/user_connection_request").get(whatAreMyConnections);
+router.route("/user/accept_connection_request").post(acceptUserConnectionRequest);
 
 
 
