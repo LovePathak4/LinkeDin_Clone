@@ -393,37 +393,47 @@ export const whatAreMyConnections = async (req, rs) => {
 
 
 export const acceptUserConnectionRequest = async (req, res) => {
-    const {token, requestId, action_type}= req.body;
+    const { token, requestId, action_type } = req.body;
 
-    try{
+    try {
 
-        const user= await User.findOne({token});
+        const user = await User.findOne({ token });
 
-        if(!user){
-            return res.staus(404).json({message: "User not found"})
+        if (!user) {
+            return res.staus(404).json({ message: "User not found" })
         }
 
-        const connection = await ConnectionRequest.findOne({_id: requestId});
+        const connection = await ConnectionRequest.findOne({ _id: requestId });
 
-        if(!connection){
-            return res.status(404).json({message: "connection not found"})
+        if (!connection) {
+            return res.status(404).json({ message: "connection not found" })
         }
 
-        if(action_type === "accept"){
-            connection.staus_accepted= true;
-        }else{
-            connection.status_accepted= false;
+        if (action_type === "accept") {
+            connection.staus_accepted = true;
+        } else {
+            connection.status_accepted = false;
         }
 
 
         await connection.save();
 
-        return res.json({message: "Request Updated"})
+        return res.json({ message: "Request Updated" })
 
 
     }
-    catch(err){
-        return res.status(500).json({message: err.message});
+    catch (err) {
+        return res.status(500).json({ message: err.message });
 
     }
 }
+
+
+
+
+
+
+
+
+
+
