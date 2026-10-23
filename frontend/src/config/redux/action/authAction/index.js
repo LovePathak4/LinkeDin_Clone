@@ -125,4 +125,4 @@ export const AcceptConnection = createAsyncThunk(
       return thunkAPI.rejectWithValue(error.response.data.message);
     }
   }
-);
+); 

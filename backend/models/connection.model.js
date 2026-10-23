@@ -1,21 +1,31 @@
-import mongoose from 'mongoose';
-//import { ref } from 'pdfkit';
 
-const connectionRequest = new mongoose.Schema({
+import mongoose from "mongoose";
+
+const connectionRequestSchema = new mongoose.Schema(
+  {
     userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
     connectionId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
-    status_accepted:{
-        type: Boolean,
-        default: null,
-    }
+    status_accepted: {
+      type: Boolean,
+      default: null,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
 
-});
+const ConnectionRequest = mongoose.model(
+  "ConnectionRequest",
+  connectionRequestSchema
+);
 
-const ConnectionRequest = mongoose.model('ConnectionRequest', connectionRequest);  
 export default ConnectionRequest;

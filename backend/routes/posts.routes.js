@@ -1,46 +1,60 @@
-import {Router} from 'express';
-import {activeCheck, commentPost, delete_comment_of_user, get_comment_by_post, increment_likes} from '../controllers/posts.controller.js';
-import {createPost} from '../controllers/posts.controller.js';
-import multer from 'multer';
-import { getAllPosts } from '../controllers/posts.controller.js';
-import { deletePost } from '../controllers/posts.controller.js';
 
+import { Router } from "express";
+import multer from "multer";
+import path from "path";
+import fs from "fs";
 
+import {
+  activeCheck,
+  createPost,
+  getAllPosts,
+  deletePost,
+  commentPost,
+  get_comment_by_post,
+  delete_comment_of_user,
+  increment_likes,
+} from "../controllers/posts.controller.js";
 
+const router = Router();
 
+// Ensure the uploads directory exists.
+const uploadDir = "uploads";
 
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
 
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadDir);
+  },
 
-const router= Router();
+  filename: (req, file, cb) => {
+    const uniqueName =
+      Date.now() +
+      "-" +
+      Math.round(Math.random() * 1e9) +
+      path.extname(file.originalname);
 
-const storage= multer.diskStorage({
-    destination: (req, file, cb) =>{
-        cb(null, 'uploads/')
-    },
-    filename:(req, file, cb)=> {
-        cb(null, file.originalname)
-    },
-})
+    cb(null, uniqueName);
+  },
+});
 
-const upload = multer({storage: storage});
+const upload = multer({
+  storage,
+  limits: {
+    fileSize: 10 * 1024 * 1024, // 10 MB
+  },
+});
 
+router.get("/", activeCheck);
 
-
-
-
-router.get('/', activeCheck);
-
-router.route('/post').post(upload.single('media', createPost));
-router.route('/posts').get(getAllPosts);
-router.route("/delete_post").post(deletePost);
-router.route("/comment").post(commentPost);
-router.route("/get_comments").get(get_comment_by_post);
-router.route("/delete_comment").delete(delete_comment_of_user);
-router.route("/increment_post_like").post(increment_likes);
-
-
-
-
-
+router.post("/post", upload.single("media"), createPost);
+router.get("/posts", getAllPosts);
+router.post("/delete_post", deletePost);
+router.post("/comment", commentPost);
+router.get("/get_comments", get_comment_by_post);
+router.delete("/delete_comment", delete_comment_of_user);
+router.post("/increment_post_like", increment_likes);
 
 export default router;

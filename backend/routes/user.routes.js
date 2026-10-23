@@ -1,56 +1,83 @@
-import {Router} from "express";
-import { downloadProfile, register, uploadProfilePicture } from "../controllers/user.controller.js";
-import { login } from "../controllers/user.controller.js";
+
+import { Router } from "express";
 import multer from "multer";
-import { updateUserProfile } from "../controllers/user.controller.js";
-import {getUserAndProfile} from "../controllers/user.controller.js"; 
-import { updateProfileData } from "../controllers/user.controller.js";
-import { getAllUserProfile } from "../controllers/user.controller.js";
-//import { downloadProfile } from "../controllers/user.controller.js";
-import { sendConnectionRequest} from "../controllers/user.controller.js";
-import { getMyConnectionsRequests} from "../controllers/user.controller.js";
-import { whatAreMyConnections } from "../controllers/user.controller.js";
-import { acceptUserConnectionRequest} from "../controllers/user.controller.js";
+import fs from "fs";
+import path from "path";
 
+import {
+  downloadProfile,
+  register,
+  login,
+  uploadProfilePicture,
+  updateUserProfile,
+  getUserAndProfile,
+  updateProfileData,
+  getAllUserProfile,
+  sendConnectionRequest,
+  getMyConnectionsRequests,
+  whatAreMyConnections,
+  acceptUserConnectionRequest,
+} from "../controllers/user.controller.js";
 
+const router = Router();
 
+const uploadDir = "uploads";
 
+// Create the upload directory if it does not exist.
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
 
-const router=Router();
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadDir);
+  },
 
-const storage= multer.diskStorage({
-    destination:(req, file, cb) =>{
-        cb(null, 'uploads/');
-    },
-    filename: (req, file, cb)=>{
-        cb(null, file.originalname);
-    }
+  filename: (req, file, cb) => {
+    const uniqueName =
+      Date.now() +
+      "-" +
+      Math.round(Math.random() * 1e9) +
+      path.extname(file.originalname);
+
+    cb(null, uniqueName);
+  },
 });
 
+const upload = multer({
+  storage,
+  limits: {
+    fileSize: 5 * 1024 * 1024, // 5 MB
+  },
+});
 
-const upload = multer({storage: storage});
+// Profile picture
+router.post(
+  "/update_profile_picture",
+  upload.single("profile_picture"),
+  uploadProfilePicture
+);
 
+// Authentication
+router.post("/register", register);
+router.post("/login", login);
 
-router.route("/update_profile_picture")
-.post(upload.single('profile_picture'), uploadProfilePicture)
+// User profile
+router.post("/user_update", updateUserProfile);
+router.post("/get_user_and_profile", getUserAndProfile);
+router.post("/update_profile_data", updateProfileData);
+router.post("/get_all_users", getAllUserProfile);
 
+// Connection requests
+router.post("/user/send_connection_request", sendConnectionRequest);
+router.get("/user/getConnection_requests", getMyConnectionsRequests);
+router.get("/user/user_connection_request", whatAreMyConnections);
+router.post(
+  "/user/accept_connection_request",
+  acceptUserConnectionRequest
+);
 
-
-router.route('/register').post(register);
-router.route('/login').post(login);
-router.route("/user_update").post(updateUserProfile);
-router.route("/get_user_and_profile").post(getUserAndProfile);
-router.route("/update_profile_data").post(updateProfileData);
-router.route("/get_all_users").post(getAllUserProfile);
-//router.route("/user/download_resume").get(downloadProfile);
-router.route("/user/send_connection_request").post(sendConnectionRequest);
-router.route("/user/getConnection_requests").get(getMyConnectionsRequests);
-router.route("/user/user_connection_request").get(whatAreMyConnections);
-router.route("/user/accept_connection_request").post(acceptUserConnectionRequest);
-
-
-
-
+// Resume download
+router.get("/download_resume", downloadProfile);
 
 export default router;
-

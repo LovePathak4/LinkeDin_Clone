@@ -1,58 +1,46 @@
+
 import mongoose from "mongoose";
 
-const PostSchema = new mongoose.Schema({
-    userId:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"User",
+const PostSchema = new mongoose.Schema(
+  {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
 
     body: {
-        type:String,
-        required:true,
-    },
-    
-    likes:{
-        type:Number,
-        default:0,
-
+      type: String,
+      required: true,
+      trim: true,
     },
 
-    createdAt:{
-        type:Date,
-        default:Date.now,
-
+    likes: {
+      type: Number,
+      default: 0,
+      min: 0,
     },
 
-    updatedAt:{
-         type:Date,
-         default:Date.now,
-        
-
+    media: {
+      type: String,
+      default: "",
     },
 
-    media:{
-        type:String,
-        default:"",
-
+    active: {
+      type: Boolean,
+      default: true,
     },
 
-    active:{
-        type:Boolean,
-        default:true,
+    fileType: {
+      type: String,
+      default: "",
     },
-    fileType:{
-        type:String,
-        default:"",
-    }
+  },
+  {
+    timestamps: true,
+  }
+);
 
-
-
-});
-
-
-
-
-
-const Post=mongoose.model("Post", PostSchema);
+const Post = mongoose.model("Post", PostSchema);
 
 export default Post;
