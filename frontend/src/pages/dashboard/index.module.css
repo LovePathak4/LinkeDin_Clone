@@ -1,0 +1,100 @@
+.scrollComponent { display: flex; flex-direction: column; gap: .6rem; }
+
+/* CREATE POST CARD */
+.createPostCard { background: white; border-radius: 10px; border: 1px solid #e0e0e0; padding: 1rem 1rem .6rem; }
+
+.createPostTop { display: flex; align-items: center; gap: .8rem; margin-bottom: .8rem; }
+.createPostTop img { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 1px solid #c0c0c0; flex-shrink: 0; }
+
+.createPostInput {
+  flex: 1;
+  padding: .75rem 1.1rem;
+  border: 1.5px solid #c0c0c0;
+  border-radius: 30px;
+  font-size: .95rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: white;
+  color: rgba(0,0,0,.7);
+  outline: none;
+  resize: none;
+  font-family: inherit;
+  width: 100%;
+  transition: border-color .15s;
+}
+.createPostInput:focus { border-color: #0a66c2; }
+
+.createPostDivider { height: 1px; background: #e0e0e0; margin: .4rem 0; }
+
+.createPostActions { display: flex; align-items: center; justify-content: space-around; padding: .2rem 0; }
+
+.createPostBtn {
+  display: flex;
+  align-items: center;
+  gap: .45rem;
+  padding: .55rem .9rem;
+  border-radius: 6px;
+  font-size: .85rem;
+  font-weight: 600;
+  color: rgba(0,0,0,.65);
+  cursor: pointer;
+  border: none;
+  background: none;
+  transition: background .15s;
+}
+.createPostBtn:hover { background: #f3f2ef; color: #000; }
+.createPostBtn svg { width: 20px; height: 20px; flex-shrink: 0; }
+
+.sortBar { display: flex; justify-content: flex-end; align-items: center; padding: .3rem 0; }
+.sortLabel { font-size: .82rem; color: rgba(0,0,0,.6); cursor: pointer; display: flex; align-items: center; gap: .3rem; font-weight: 600; }
+.sortLabel:hover { color: #0a66c2; }
+
+/* POST CARD */
+.postCard { background: white; border-radius: 10px; border: 1px solid #e0e0e0; overflow: hidden; }
+.postCard__header { display: flex; align-items: flex-start; justify-content: space-between; padding: 1rem 1rem .5rem; }
+.postCard__headerLeft { display: flex; align-items: center; gap: .7rem; }
+.postCard__avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; cursor: pointer; }
+.postCard__name { font-size: .9rem; font-weight: 600; color: #000; cursor: pointer; }
+.postCard__name:hover { color: #0a66c2; text-decoration: underline; }
+.postCard__meta { font-size: .78rem; color: rgba(0,0,0,.5); }
+.deleteBtn { background: none; border: none; cursor: pointer; color: #cc0000; padding: .2rem; }
+.postCard__body { padding: 0 1rem .6rem; font-size: .9rem; color: rgba(0,0,0,.9); line-height: 1.5; }
+.postCard__image { width: 100%; }
+.postCard__image img { width: 100%; max-height: 500px; object-fit: cover; display: block; }
+.postCard__stats { display: flex; justify-content: space-between; padding: .5rem 1rem; font-size: .78rem; color: rgba(0,0,0,.5); border-bottom: 1px solid #e0e0e0; }
+
+.postCard__actions { display: flex; justify-content: space-around; padding: .2rem .5rem; }
+
+.actionBtn {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: .3rem;
+  padding: .45rem .5rem;
+  border-radius: 6px;
+  font-size: .82rem;
+  font-weight: 600;
+  color: rgba(0,0,0,.6);
+  cursor: pointer;
+  border: none;
+  background: none;
+  flex: 1;
+  transition: background .15s;
+}
+.actionBtn:hover { background: #f3f2ef; color: #000; }
+.actionBtn svg { width: 18px; height: 18px; flex-shrink: 0; }
+.liked { color: #0a66c2; }
+
+/* COMMENTS */
+.commentsSection { border-top: 1px solid #e0e0e0; padding: .8rem 1rem; background: #f9f9f9; }
+.commentItem { display: flex; gap: .6rem; margin-bottom: .8rem; }
+.commentItem img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+.commentBubble { background: white; border-radius: 10px; padding: .5rem .8rem; border: 1px solid #e0e0e0; flex: 1; }
+.commentBubble strong { font-size: .82rem; display: block; }
+.commentBubble p { font-size: .82rem; color: rgba(0,0,0,.8); margin-top: .2rem; }
+.commentInputRow { display: flex; gap: .6rem; align-items: center; margin-top: .6rem; }
+.commentInputRow img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; }
+.commentInputRow input { flex: 1; padding: .5rem 1rem; border: 1px solid #c0c0c0; border-radius: 20px; font-size: .85rem; outline: none; font-family: inherit; }
+.commentInputRow input:focus { border-color: #0a66c2; }
+.commentSubmitBtn { padding: .4rem .9rem; background: #0a66c2; color: white; border: none; border-radius: 20px; font-size: .82rem; font-weight: 600; cursor: pointer; }
