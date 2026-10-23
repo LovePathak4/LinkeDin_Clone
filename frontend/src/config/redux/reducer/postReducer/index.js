@@ -32,13 +32,13 @@ const postSlice=createSlice({
             state.isError=false;
             state.postFetched=true;
             console.log(action.payload.posts);
-            state.posts=action.payload.posts.reverse();
+            state.posts = action.payload.posts;
             console.log(`HERE`,state.posts);
         })
         .addCase(getAllPosts.rejected,(state,action)=>{
             state.isLoading=false;
             state.isError=true;
-            state.message=action.payload;
+            state.message = action.payload?.message || "Failed to fetch posts";
         })
         .addCase(getAllComments.fulfilled,(state,action)=>{
             state.postId=action.payload.post_id;

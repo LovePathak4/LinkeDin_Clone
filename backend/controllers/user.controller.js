@@ -554,7 +554,7 @@ const convertUserDataTOPDF = async (userData) => {
     doc.text(`Username: ${user.username || ""}`);
     doc.text(`Email: ${user.email || ""}`);
     doc.text(`Bio: ${userData.bio || ""}`);
-    doc.text(`Current Position: ${userData.currentPosition || ""}`);
+    doc.text(`Current Position: ${ userData.currentPost || ""}`);
     doc.moveDown();
 
     doc.fontSize(16).text("Past Work");
@@ -648,7 +648,9 @@ export const login = async (req, res) => {
             });
         }
 
-        const user = await User.findOne({ email });
+        const user = await User.findOne({
+    email: String(email).trim().toLowerCase()
+}).select("+password");
 
         if (!user) {
             return res.status(401).json({
@@ -666,8 +668,7 @@ export const login = async (req, res) => {
 
         const token = crypto.randomBytes(32).toString("hex");
 
-        user.token = token;
-        await user.save();
+        await User.updateOne({ _id: user._id }, { $set: { token } });
 
         return res.status(200).json({ token });
     } catch (error) {
@@ -790,7 +791,7 @@ export const updateUserProfile = async (req, res) => {
 // Get the logged-in user's profile.
 export const getUserAndProfile = async (req, res) => {
     try {
-        const { token } = req.body;
+        const token = req.body?.token || req.query?.token;
 
         if (!token) {
             return res.status(400).json({
@@ -852,11 +853,8 @@ export const updateProfileData = async (req, res) => {
         }
 
         // Update only profile fields; never overwrite userId.
-        const allowedFields = [
-            "bio",
-            "currentPosition",
-            "pastWork"
-        ];
+
+       const allowedFields = ["bio", "currentPost", "pastWork", "education"];
 
         for (const field of allowedFields) {
             if (newProfileData[field] !== undefined) {
@@ -878,6 +876,8 @@ export const updateProfileData = async (req, res) => {
     }
 };
 
+
+
 // Get all profiles.
 export const getAllUserProfile = async (req, res) => {
     try {
@@ -895,6 +895,8 @@ export const getAllUserProfile = async (req, res) => {
         });
     }
 };
+
+
 
 // Download a user's resume PDF.
 export const downloadProfile = async (req, res) => {
@@ -938,6 +940,9 @@ export const downloadProfile = async (req, res) => {
         });
     }
 };
+
+
+
 
 // Send a connection request.
 export const sendConnectionRequest = async (req, res) => {
@@ -1002,10 +1007,13 @@ export const sendConnectionRequest = async (req, res) => {
     }
 };
 
+
+
 // Get requests sent by the logged-in user.
 export const getMyConnectionsRequests = async (req, res) => {
     try {
-        const token = req.body.token || req.query.token;
+        const token = req.body?.token || req.query?.token;
+        
 
         const user = await User.findOne({ token });
 
@@ -1031,10 +1039,13 @@ export const getMyConnectionsRequests = async (req, res) => {
     }
 };
 
+
+
+
 // Get connection requests received by the logged-in user.
 export const whatAreMyConnections = async (req, res) => {
     try {
-        const token = req.body.token || req.query.token;
+        const token = req.body?.token || req.query?.token;
 
         const user = await User.findOne({ token });
 
@@ -1059,6 +1070,8 @@ export const whatAreMyConnections = async (req, res) => {
         });
     }
 };
+
+
 
 // Accept or reject a received connection request.
 export const acceptUserConnectionRequest = async (req, res) => {

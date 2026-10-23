@@ -64,9 +64,11 @@ router.post("/login", login);
 
 // User profile
 router.post("/user_update", updateUserProfile);
-router.post("/get_user_and_profile", getUserAndProfile);
 router.post("/update_profile_data", updateProfileData);
-router.post("/get_all_users", getAllUserProfile);
+router.route("/get_user_and_profile").get(getUserAndProfile).post(getUserAndProfile);
+router.route("/get_all_users").get(getAllUserProfile).post(getAllUserProfile);
+
+
 
 // Connection requests
 router.post("/user/send_connection_request", sendConnectionRequest);

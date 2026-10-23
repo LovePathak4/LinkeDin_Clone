@@ -19,15 +19,24 @@ function Dashboard() {
   const [commentText, setCommentText] = useState("");
   const [openCommentPostId, setOpenCommentPostId] = useState(null);
 
+
+
   useEffect(() => {
     if (authState.isTokenThere) {
       dispatch(getAllPosts());
-      dispatch(getAboutUser({ token: localStorage.getItem("token") }));
+      dispatch(getAboutUser({ token: localStorage.getItem("token") }))
+        .unwrap()
+        .catch(() => {
+          localStorage.removeItem("token");
+          router.push("/login");
+        });
     }
     if (!authState.all_profiles_fetched) {
       dispatch(getAllUsers());
     }
   }, [authState.isTokenThere]);
+
+
 
   const handleUpload = async () => {
     if (!postContent.trim()) return;
@@ -133,8 +142,10 @@ function Dashboard() {
               </svg>
             </span>
           </div>
+
           {/* POSTS FEED */}
-          {postState.posts.map((post) => (
+
+          {postState.posts.filter((post) => post.userId).map((post) => (
             <div key={post._id} className={styles.postCard}>
 
               {/* Header */}
@@ -153,7 +164,7 @@ function Dashboard() {
                     <p className={styles.postCard__meta}>@{post.userId.username}</p>
                   </div>
                 </div>
-                {post.userId._id === authState.user.userId._id && (
+                { post.userId._id === authState.user.userId?._id && (
                   <button className={styles.deleteBtn} onClick={async () => {
                     await dispatch(deletePost({ post_id: post._id }));
                     dispatch(getAllPosts());
@@ -230,7 +241,7 @@ function Dashboard() {
               {/* Comments Section */}
               {openCommentPostId === post._id && (
                 <div className={styles.commentsSection}>
-                  {postState.comments.map((c) => (
+                 {postState.comments.filter((c) => c.userId).map((c) => (
                     <div key={c._id} className={styles.commentItem}>
                       <img src={`${BASE_URL}/${c.userId.profilePicture}`} alt="" />
                       <div className={styles.commentBubble}>
