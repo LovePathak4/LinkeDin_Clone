@@ -17,6 +17,7 @@ import {
   getMyConnectionsRequests,
   whatAreMyConnections,
   acceptUserConnectionRequest,
+  getProfileBasedOnUsername,
 } from "../controllers/user.controller.js";
 
 const router = Router();
@@ -67,7 +68,7 @@ router.post("/user_update", updateUserProfile);
 router.post("/update_profile_data", updateProfileData);
 router.route("/get_user_and_profile").get(getUserAndProfile).post(getUserAndProfile);
 router.route("/get_all_users").get(getAllUserProfile).post(getAllUserProfile);
-
+router.get("/user/get_profile_based_on_username",getProfileBasedOnUsername);
 
 
 // Connection requests

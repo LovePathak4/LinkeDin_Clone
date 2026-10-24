@@ -77,13 +77,24 @@ const authSlice = createSlice({
                 state.all_users = action.payload.profiles;
             })
             .addCase(getConnectionsRequest.fulfilled, (state, action) => {
-                state.connections = action.payload;
+                state.connections = Array.isArray(action.payload)
+                    ? action.payload
+                    : [];
             })
+
+            // .addCase(getConnectionsRequest.fulfilled, (state, action) => {
+            //     state.connections = action.payload;
+            // })
             .addCase(getConnectionsRequest.rejected, (state, action) => {
                 state.message = action.payload;
             })
+            // .addCase(getMyConnectionRequests.fulfilled, (state, action) => {
+            //     state.connectionRequest = action.payload;
+            // })
             .addCase(getMyConnectionRequests.fulfilled, (state, action) => {
-                state.connectionRequest = action.payload;
+                state.connectionRequest = Array.isArray(action.payload)
+                    ? action.payload
+                    : [];
             })
             .addCase(getMyConnectionRequests.rejected, (state, action) => {
                 state.message = action.payload;

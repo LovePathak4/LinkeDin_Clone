@@ -15,6 +15,8 @@ app.use(express.static("uploads"));
 app.use(postRoutes);
 app.use(userRoutes);
 
+
+
 const PORT = process.env.PORT || 9080;
 
 const start = async () => {
