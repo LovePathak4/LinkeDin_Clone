@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { createPost, deletePost, getAllComments, getAllPosts, incrementPostLike, postComment } from "@/config/redux/action/postAction";
@@ -18,6 +18,16 @@ function Dashboard() {
   const [fileContent, setFileContent] = useState(null);
   const [commentText, setCommentText] = useState("");
   const [openCommentPostId, setOpenCommentPostId] = useState(null);
+  const [isArticleMode, setIsArticleMode] = useState(false);
+  const postInputRef = useRef(null);
+
+  const handleWriteArticle = () => {
+    setIsArticleMode(true);
+    setTimeout(() => {
+      postInputRef.current?.focus();
+      postInputRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 50);
+  };
 
 
 
@@ -39,10 +49,11 @@ function Dashboard() {
 
 
   const handleUpload = async () => {
-    if (!postContent.trim()) return;
+    if (!postContent.trim() && !fileContent) return;
     await dispatch(createPost({ file: fileContent, body: postContent }));
     setPostContent("");
     setFileContent(null);
+    setIsArticleMode(false);
     dispatch(getAllPosts());
   };
 
@@ -89,16 +100,42 @@ function Dashboard() {
             <div className={styles.createPostTop}>
               <img src={`${BASE_URL}/${authState.user.userId?.profilePicture}`} alt="avatar" />
               <textarea
+                ref={postInputRef}
                 className={styles.createPostInput}
-                placeholder="Start a post"
+                placeholder={isArticleMode ? "Write your article here..." : "Start a post"}
                 value={postContent}
                 onChange={(e) => setPostContent(e.target.value)}
-                rows={postContent.length > 0 ? 3 : 1}
+                rows={postContent.length > 0 || isArticleMode ? 4 : 1}
               />
             </div>
 
-            {postContent.trim().length > 0 && (
-              <div style={{ display: "flex", justifyContent: "flex-end", paddingBottom: ".4rem" }}>
+            {fileContent && (
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: ".3rem .6rem", marginBottom: ".5rem", background: "#f3f2ef", borderRadius: "6px", fontSize: ".8rem", color: "#555" }}>
+                <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: "80%" }}>
+                  Attached: <strong>{fileContent.name}</strong>
+                </span>
+                <button 
+                  type="button"
+                  onClick={() => setFileContent(null)}
+                  style={{ background: "none", border: "none", color: "#cc0000", cursor: "pointer", fontWeight: "bold", fontSize: ".9rem" }}
+                  title="Remove attachment"
+                >
+                  ✕
+                </button>
+              </div>
+            )}
+
+            {(postContent.trim().length > 0 || fileContent || isArticleMode) && (
+              <div style={{ display: "flex", justifyContent: "flex-end", gap: ".5rem", paddingBottom: ".4rem" }}>
+                {isArticleMode && (
+                  <button 
+                    type="button"
+                    onClick={() => { setIsArticleMode(false); }} 
+                    style={{ padding: ".4rem 1rem", background: "transparent", color: "#666", border: "1px solid #ccc", borderRadius: "20px", fontSize: ".85rem", fontWeight: 600, cursor: "pointer" }}
+                  >
+                    Cancel
+                  </button>
+                )}
                 <button onClick={handleUpload} style={{ padding: ".4rem 1.2rem", background: "#0a66c2", color: "white", border: "none", borderRadius: "20px", fontSize: ".85rem", fontWeight: 600, cursor: "pointer" }}>Post</button>
               </div>
             )}
@@ -107,12 +144,13 @@ function Dashboard() {
 
             <div className={styles.createPostActions}>
               {/* Video */}
-              <button className={styles.createPostBtn}>
+              <label htmlFor="videoUpload" className={styles.createPostBtn} style={{ cursor: "pointer" }}>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#5f9b41" width="20" height="20">
                   <path fillRule="evenodd" d="M2.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h13.5a3 3 0 0 0 3-3V15l5.25 3.75V8.25L18.75 12V8.25a3 3 0 0 0-3-3H2.25Z" clipRule="evenodd" />
                 </svg>
                 Video
-              </button>
+              </label>
+              <input onChange={(e) => setFileContent(e.target.files[0])} type="file" hidden id="videoUpload" accept="video/*" />
 
               {/* Photo */}
               <label htmlFor="fileUpload" className={styles.createPostBtn} style={{ cursor: "pointer" }}>
@@ -124,7 +162,11 @@ function Dashboard() {
               <input onChange={(e) => setFileContent(e.target.files[0])} type="file" hidden id="fileUpload" accept="image/*" />
 
               {/* Write article */}
-              <button className={styles.createPostBtn}>
+              <button 
+                type="button"
+                className={styles.createPostBtn}
+                onClick={handleWriteArticle}
+              >
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#e06847" width="20" height="20">
                   <path d="M11.25 4.533A9.707 9.707 0 0 0 6 3a9.735 9.735 0 0 0-3.25.555.75.75 0 0 0-.5.707v14.25a.75.75 0 0 0 1 .707A8.237 8.237 0 0 1 6 18.75c1.995 0 3.823.707 5.25 1.886V4.533ZM12.75 20.636A8.214 8.214 0 0 1 18 18.75c.966 0 1.89.166 2.75.47a.75.75 0 0 0 1-.708V4.262a.75.75 0 0 0-.5-.707A9.735 9.735 0 0 0 18 3a9.707 9.707 0 0 0-5.25 1.533v16.103Z" />
                 </svg>

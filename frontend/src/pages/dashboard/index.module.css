@@ -26,7 +26,14 @@
 
 .createPostDivider { height: 1px; background: #e0e0e0; margin: .4rem 0; }
 
-.createPostActions { display: flex; align-items: center; justify-content: space-around; padding: .2rem 0; }
+.createPostActions { 
+  display: flex; 
+  align-items: center; 
+  justify-content: space-around; 
+  padding: .2rem 0; 
+  flex-wrap: wrap;
+  gap: .4rem;
+}
 
 .createPostBtn {
   display: flex;
@@ -41,9 +48,40 @@
   border: none;
   background: none;
   transition: background .15s;
+  white-space: nowrap;
 }
 .createPostBtn:hover { background: #f3f2ef; color: #000; }
 .createPostBtn svg { width: 20px; height: 20px; flex-shrink: 0; }
+
+@media (max-width: 520px) {
+  .createPostCard {
+    padding: .8rem .6rem .4rem;
+  }
+  .createPostActions {
+    justify-content: space-between;
+  }
+  .createPostBtn {
+    padding: .45rem .45rem;
+    font-size: .78rem;
+    gap: .25rem;
+  }
+  .createPostBtn svg {
+    width: 18px;
+    height: 18px;
+  }
+  .postCard__actions {
+    padding: .2rem 0;
+  }
+  .actionBtn {
+    padding: .4rem .2rem;
+    font-size: .74rem;
+    gap: .2rem;
+  }
+  .actionBtn svg {
+    width: 16px;
+    height: 16px;
+  }
+}
 
 .sortBar { display: flex; justify-content: flex-end; align-items: center; padding: .3rem 0; }
 .sortLabel { font-size: .82rem; color: rgba(0,0,0,.6); cursor: pointer; display: flex; align-items: center; gap: .3rem; font-weight: 600; }
