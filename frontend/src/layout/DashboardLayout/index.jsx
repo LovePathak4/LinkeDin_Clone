@@ -109,7 +109,7 @@ function DashboardLayout({ children }) {
           {authState.all_profiles_fetched && authState.all_users.length > 0 && (
             <div className={styles.suggestCard}>
               <h3 className={styles.suggestCard__title}>People you may know</h3>
-              {authState.all_users.slice(0, 3).map((profile) => (
+              {authState.all_users.filter((profile) => profile?.userId && profile.userId._id !== user?.userId?._id && profile.userId.username !== user?.userId?.username).slice(0, 3).map((profile) => (
                 <div key={profile._id} className={styles.suggestItem} onClick={() => router.push(`/view_profile/${profile.userId.username}`)}>
                   <img src={`${BASE_URL}/${profile.userId.profilePicture}`} alt="" className={styles.suggestAvatar} />
                   <div>
